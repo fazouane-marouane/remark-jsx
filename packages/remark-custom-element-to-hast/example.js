@@ -13,7 +13,9 @@ const md =
 
 _Hey!_
 
-<Note content="*Hello*" />
+<Note content={Hello} />
+<Note content={'Hello'} />
+<Note content={"Hello"} />
 
 A <Note content="This should be displayed">
   <Strong>Cool _test_</Strong> with some <InlineNote value="content"/>

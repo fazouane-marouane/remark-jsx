@@ -63,11 +63,11 @@ function pipeTokenizers(tokenizers, value) {
 }
 
 var attributeName = '[a-zA-Z_:][a-zA-Z0-9:._-]*';
-var unquoted = '([^"\'=<>`\\u0000-\\u0020]+)';
+var unquoted = '([^"\'=<>`\\u0000-\\u0020{}]+)';
 var singleQuoted = '\'([^\']*)\'';
 var doubleQuoted = '"([^"]*)"';
 var attributeValue = '(?:' + unquoted + '|' + singleQuoted + '|' + doubleQuoted + ')';
-var attribute = '(?:\\s+' + attributeName + '(?:\\s*=\\s*' + attributeValue + ')?)';
+var attribute = '(?:\\s+' + attributeName + '(?:\\s*={*\\s*' + attributeValue + '}*)?)';
 
 function smartHtmlParser(componentWhitelist) {
   var components = blockElements.concat(componentWhitelist).join('|');
@@ -75,7 +75,7 @@ function smartHtmlParser(componentWhitelist) {
   function parseOpeningTags(isAutoClosing, valueDesc) {
     return partialTokenizer(function (valueDesc) {
       var regexp = '<(' + components + ')(' + attribute + '*)\\s*' + (isAutoClosing ? '/>' : '>');
-      var propertiesRegex = '(' + attributeName + ')\\s*=\\s*' + attributeValue + '?';
+      var propertiesRegex = '(' + attributeName + ')\\s*={*\\s*' + attributeValue + '}*?';
       var matches = getAllMatches(regexp, valueDesc.value).map(function (match) {
         return {
           value: match[0],
